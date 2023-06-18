@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block y %}
+
+<h1> REGISTER </h1>
+
+<form action="/login" method="POST" enctype = "multipart/form-data">
+	<input placeholder="Name" autocomplete="off" type="text" name="name"><br>
+	<label for="ufile" id="ufile">Pick file </label>
+	<input placeholder="File" type="file" name="ufile" id="ufile"><br>
+	<input type="submit" name="Register">
+</form>
+
+{% endblock %}
