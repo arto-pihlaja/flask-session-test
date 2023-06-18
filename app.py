@@ -23,7 +23,7 @@ def index():
     if not nm:
         return redirect("/login")
     else:   
-        with open(f'./flask-session-test/pickles/{nm}', 'rb') as f:     
+        with open(nm, 'rb') as f:     
             ud = pickle.load(f)
     return render_template('index.html', context=ud)
  
@@ -36,7 +36,7 @@ def login():
         ud = UserData(nm)
         ud.set_file(uf)
         session["name"] = nm
-        with open(f'./flask-session-test/pickles/{nm}', 'wb') as f:
+        with open(nm, 'wb') as f:
             pickle.dump(ud, f)
         return redirect("/")
     return render_template("login.html")
