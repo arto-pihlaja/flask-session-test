@@ -2,11 +2,19 @@
 from flask import Flask, render_template, redirect, request, session
 # The Session instance is not used for direct access, you should always use flask.session
 from flask_session import Session
+from werkzeug.utils import secure_filename
 import pickle 
- 
+import os
+
+if os.path.exists('./pickles'):
+    pass
+else:
+    os.makedirs('./pickles')
+
 app = Flask(__name__, template_folder='.')
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.secret_key = 'DefineLytcheSala'
 Session(app)
 
 class UserData:
@@ -19,11 +27,12 @@ class UserData:
  
 @app.route("/")
 def index():
+    ss = session._get_current_object()
     nm = session.get("name")
     if not nm:
         return redirect("/login")
-    else:   
-        with open(nm, 'rb') as f:     
+    else:           
+        with open(os.path.join('./pickles', ss.sid), 'rb') as f:     
             ud = pickle.load(f)
     return render_template('index.html', context=ud)
  
@@ -31,12 +40,13 @@ def index():
 @app.route("/login", methods=["POST", "GET"])
 def login():
     if request.method == "POST":
+        ss = session._get_current_object()
         nm = request.form.get("name")
         uf = request.files['ufile'].filename
         ud = UserData(nm)
         ud.set_file(uf)
         session["name"] = nm
-        with open(nm, 'wb') as f:
+        with open(os.path.join('./pickles', ss.sid), 'wb') as f:
             pickle.dump(ud, f)
         return redirect("/")
     return render_template("login.html")
@@ -44,7 +54,7 @@ def login():
  
 @app.route("/logout")
 def logout():
-    session["name"] = None
+    session.pop('name', default=None)     
     return redirect("/")
  
  
