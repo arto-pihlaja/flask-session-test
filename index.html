@@ -2,8 +2,10 @@
 
 {% block y %}
 
-{% if session.name %}
-	You are {{ session.name }} <a href="/logout">logout</a>. <br>
+{% if session.uid %}
+	You are {{ ud.uname }} <a href="/logout">logout</a>. <br>
+	You uploaded a file named {{ ud.file }} . <br>
+	Session id {{ sid }} 
 	
 {% else %}
 	You are not registered. <a href="/login">login</a>.
